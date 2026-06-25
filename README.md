@@ -107,6 +107,11 @@ Simulation parameters can be configured in:
 src/config.py
 ```
 
+The generated graphs can be edited in
+```text
+src/plots.py
+```
+
 ---
 
 # Implemented Systems (Example)
@@ -179,6 +184,7 @@ ChaosSyncPy/
 │   ├── config.py
 │   ├── controller.py
 │   ├── disturbances.py
+│   ├── integrator.py
 │   ├── plots.py
 │   ├── synchronization.py
 │   ├── system.py

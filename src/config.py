@@ -11,22 +11,23 @@
 SIMULATION_CONFIG = {
 
     # solver
-    
     "solver": "RK45",
 
     # relative and absolute tolerances
-
     "rtol": 1e-8,
     "atol": 1e-8,
 
     # maximum step size
-
     "max_step": 0.01,
 
     # start and stop times
-    
     "t0": 0.0,
     "tf": 30.0,
 
-    "num_points": 10000
+    # number of samples returned for plotting and analysis
+    "num_points": 10000,
+
+    # simulation interval processed between progress updates
+    "block_size": 1.0
+
 }
