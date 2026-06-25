@@ -4,6 +4,7 @@ from scipy.integrate import solve_ivp
 
 from src.synchronization import master_slave_system
 from src.disturbances import (WhiteNoise, Sinusoidal, NoDisturbance)
+from src.integrator import integrate_with_progress
 from src.plots import plot_states
 from src.plots import plot_error
 from src.plots import plot_attractor
@@ -43,36 +44,41 @@ initial_state = np.concatenate([
 ])
 
 # simulation
-sol = solve_ivp(
+t, states = integrate_with_progress(
     lambda t, state:
-        master_slave_system(t, state, n_states, disturbance),
-    [SIMULATION_CONFIG["t0"],
-     SIMULATION_CONFIG["tf"]],
+        master_slave_system(
+            t,
+            state,
+            n_states,
+            disturbance
+        ),
+
     initial_state,
+
+    t0=SIMULATION_CONFIG["t0"],
+    tf=SIMULATION_CONFIG["tf"],
+
+    num_points=SIMULATION_CONFIG["num_points"],
+
+    block_size=SIMULATION_CONFIG["block_size"],
 
     method=SIMULATION_CONFIG["solver"],
 
     rtol=SIMULATION_CONFIG["rtol"],
     atol=SIMULATION_CONFIG["atol"],
 
-    max_step=SIMULATION_CONFIG["max_step"],
-
-    t_eval=np.linspace(
-        SIMULATION_CONFIG["t0"],
-        SIMULATION_CONFIG["tf"],
-        SIMULATION_CONFIG["num_points"]
-    )
+    max_step=SIMULATION_CONFIG["max_step"]
 )
 
 # results
-xm = sol.y[:n_states].T
-xs = sol.y[n_states:].T
+xm = states[:, :n_states]
+xs = states[:, n_states:]
 
 error = xs - xm
 
 # plots
-plot_states(sol.t, xm, xs)
+plot_states(t, xm, xs)
 
-plot_error(sol.t, error)
+plot_error(t, error)
 
 plot_attractor(xm, xs)
